@@ -1,26 +1,29 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:deneme_haberapp/pages/adminDrawerPage.dart';
 import 'package:deneme_haberapp/pages/drawerPage.dart';
 import 'package:deneme_haberapp/tabs/anasayfaPage.dart';
 import 'package:deneme_haberapp/tabs/mkpHaberlerPage.dart';
 import 'package:deneme_haberapp/tabs/sokDkPage.dart';
+import 'package:deneme_haberapp/tabs/sporPage.dart';
 import 'package:deneme_haberapp/tabs/teknolojiPage.dart';
 import 'package:extended_tabs/extended_tabs.dart';
 import 'package:flutter/material.dart';
 
 import 'denemePage.dart';
 
-class HomePage extends StatefulWidget {
+class AdminHomePage extends StatefulWidget {
 
 
   final String value;
 
 
-  HomePage({Key key,this.value}) : super (key:key);
+  AdminHomePage({Key key,this.value}) : super (key:key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _AdminHomePageState createState() => _AdminHomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _AdminHomePageState extends State<AdminHomePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
@@ -33,7 +36,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerPage(valuee: widget.value.toString()),
+      drawer: AdminDrawerPage(valuee: widget.value.toString()),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.red,
