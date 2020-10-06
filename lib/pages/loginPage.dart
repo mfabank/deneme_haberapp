@@ -85,7 +85,7 @@ class _LoginRegisterState extends State<LoginRegister> {
                                   color: Colors.blueGrey,
                                 ),
                                 hintText: "Parola"),
-                                obscureText: true,
+                            obscureText: true,
                           ),
                         ),
                         Container(

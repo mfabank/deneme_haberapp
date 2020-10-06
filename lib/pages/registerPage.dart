@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'homePage.dart';
 
-
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -15,6 +14,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String _email, _pass;
   DialogBox dialogBox = DialogBox();
   final GlobalKey<FormState> _formkey = new GlobalKey<FormState>();
+  var _control = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,15 +29,13 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
         child: Column(
-
           children: [
             Column(
-
               children: [
                 Form(
                   key: _formkey,
                   child: Container(
-                    padding: EdgeInsets.only(top:70),
+                    padding: EdgeInsets.only(top: 70),
                     margin: EdgeInsets.all(50),
                     width: 500,
                     height: 500,
@@ -45,15 +43,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: <Widget>[
                         Container(
                           child: Icon(
-                            Icons.person,size: 130,
+                            Icons.person,
+                            size: 130,
                             color: Colors.blueGrey,
                           ),
-
                         ),
                         Container(
                           width: 300,
-                          margin: EdgeInsets.only(top:10),
+                          margin: EdgeInsets.only(top: 10),
                           child: TextFormField(
+                            controller: _control,
                             validator: (input) {
                               if (input.isEmpty) {
                                 return "Lütfen emaili boş bırakmayınız";
@@ -71,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         Container(
                           width: 300,
-                          margin: EdgeInsets.only(top:10),
+                          margin: EdgeInsets.only(top: 10),
                           child: TextFormField(
                             validator: (input) {
                               if (input.isEmpty) {
@@ -89,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top:20),
+                          margin: EdgeInsets.only(top: 20),
                           child: RaisedButton(
                             child: Text("Kayıt ol"),
                             color: Colors.blueGrey[100],
@@ -97,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top:20),
+                          margin: EdgeInsets.only(top: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -107,7 +106,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => LoginRegister()));
+                                            builder: (context) =>
+                                                LoginRegister()));
                                   },
                                   child: Text(
                                     "Giriş Yap!",
@@ -127,6 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+
   Future<void> kayitOl() async {
     final form = _formkey.currentState;
 
@@ -137,7 +138,11 @@ class _RegisterPageState extends State<RegisterPage> {
         UserCredential user = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _pass);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomePage(
+                  value: _control.text,
+                )));
       } catch (e) {
         dialogBox.information(context, "Hatalı Giriş", "");
         return (e.toString());
