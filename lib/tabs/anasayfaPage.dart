@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:deneme_haberapp/models/posts.dart';
 import 'package:deneme_haberapp/pages/drawerPage.dart';
+import 'package:deneme_haberapp/pages/haberDetay.dart';
 import 'package:deneme_haberapp/tabs/sporPage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class Anasayfa extends StatefulWidget {
 
 class _AnasayfaState extends State<Anasayfa> {
   List<Posts> postsList = [];
-  List deneme = [
+  /*List deneme = [
     "İntihar Etti",
     "Balkondan atladı",
     "Kendine gel Beşiktaş",
@@ -23,7 +24,7 @@ class _AnasayfaState extends State<Anasayfa> {
     "Bu nasıl haber içeriği",
     "Beşiktaş küme düşecek diyorlar ",
     "Deneme1234123"
-  ];
+  ];*/
   int _current = 0;
   List imgList = [
     "https://cdn.pixabay.com/photo/2014/07/01/12/35/taxi-cab-381233_960_720.jpg",
@@ -43,7 +44,7 @@ class _AnasayfaState extends State<Anasayfa> {
   void initState() {
     super.initState();
     DatabaseReference postsRef =
-        FirebaseDatabase.instance.reference().child("Posts");
+    FirebaseDatabase.instance.reference().child("Posts");
     postsRef.once().then((DataSnapshot snap) {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
@@ -54,7 +55,7 @@ class _AnasayfaState extends State<Anasayfa> {
           DATA[individualKey]["description"],
           DATA[individualKey]["date"],
           DATA[individualKey]["time"],
-        );
+          );
         postsList.add(posts);
       }
       setState(() {
@@ -62,6 +63,8 @@ class _AnasayfaState extends State<Anasayfa> {
       });
     });
   }
+
+  Posts seciliHaber;
 
   @override
   Widget build(BuildContext context) {
@@ -136,18 +139,21 @@ class _AnasayfaState extends State<Anasayfa> {
                       elevation: 20,
                       child: ListTile(
                         title: Text(postsList[index].description),
-                        subtitle: Text(postsList[index].description),
+                        subtitle: Text(postsList[index].date),
                         leading: Image.network(
                             postsList[index].image),
                         dense: true,
-                        onTap: () {},
+                        onTap: () {
+                          this.seciliHaber=postsList[index];
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HaberDetay(postsList[index].image,postsList[index].description,postsList[index].date,postsList[index].time)));
+                        },
                       ),
                     ),
                   );
                 },
               ),
             ),
-            Expanded(
+            /*Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: postsList.length,
@@ -189,7 +195,7 @@ class _AnasayfaState extends State<Anasayfa> {
                   );
                 },
               ),
-            ),
+            ),*/
           ],
         ),
       ),

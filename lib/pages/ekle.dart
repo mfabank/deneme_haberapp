@@ -17,8 +17,11 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
 
   // ignore: unused_field
   String _myValue;
+  String _myValue2;
+  String _myValue3;
   String url;
   final formKey = GlobalKey<FormState>();
+  String dropdownValue = 'Spor';
 
   Future getImage() async {
     var tempImage = await ImagePicker.pickImage(
@@ -43,10 +46,10 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
   void uploadStatusImage() async {
     if (validateAndSave()) {
       final StorageReference postImageRef =
-          FirebaseStorage.instance.ref().child("Posts");
+      FirebaseStorage.instance.ref().child("Posts");
       var timeKey = DateTime.now();
       final StorageUploadTask uploadTask =
-          postImageRef.child(timeKey.toString() + ".jpg").putFile(sampleImage);
+      postImageRef.child(timeKey.toString() + ".jpg").putFile(sampleImage);
       var ImageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
       url = ImageUrl.toString();
       print("Image Url = " + url);
@@ -68,8 +71,8 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
     var data = {
       "image": url,
       "description": _myValue,
-      "date": date,
-      "time": time,
+      "date": _myValue2,
+      "time": _myValue3,
     };
     ref.child("Posts").push().set(data);
   }
@@ -111,20 +114,60 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
               ),
               TextFormField(
                 decoration: InputDecoration(
+
                   hintText: "Haber özetini giriniz",
                   labelText: "Özet",
                   isDense: true,
                 ),
+                validator: (value) {
+                  return value.isEmpty ? "Haber özetini giriniz" : null;
+                },
+                onSaved: (value) {
+                  return _myValue2 = value;
+                },
               ),
               Expanded(
-                child: TextField(
+                child: TextFormField(
                   decoration: InputDecoration(
                     hintText: "Haberi metnini giriniz",
                   ),
+                  validator: (value) {
+                    return value.isEmpty ? "Haber başlığını giriniz" : null;
+                  },
+                  onSaved: (value) {
+                    return _myValue3 = value;
+                  },
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
+
                 ),
               ),
+          Container(
+            padding: EdgeInsets.only(left: 240,bottom:80),
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              icon: Icon(Icons.category),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;
+                });
+              },
+              items: <String>['Spor', 'Ekonomi', 'Cinayet', 'Siyaset']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
               RaisedButton(
                 elevation: 10.0,
                 child: Text("Haberi Ekle"),
