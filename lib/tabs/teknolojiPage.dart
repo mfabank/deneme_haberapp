@@ -1,3 +1,6 @@
+import 'package:deneme_haberapp/models/posts.dart';
+import 'package:deneme_haberapp/pages/haberDetay.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class Teknoloji extends StatefulWidget {
@@ -6,18 +9,64 @@ class Teknoloji extends StatefulWidget {
 }
 
 class _TeknolojiState extends State<Teknoloji> {
+  List<Posts> postsList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    DatabaseReference postsRef =
+        FirebaseDatabase.instance.reference().child("Posts");
+    postsRef.once().then((DataSnapshot snap) {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+      postsList.clear();
+      for (var individualKey in KEYS) {
+        if (DATA[individualKey]["category"] == "Teknoloji") {
+          Posts posts = Posts(
+            DATA[individualKey]["image"],
+            DATA[individualKey]["description"],
+            DATA[individualKey]["date"],
+            DATA[individualKey]["time"],
+            DATA[individualKey]["category"],
+          );
+          postsList.add(posts);
+        }
+      }
+      setState(() {
+        print("Length : $postsList.length");
+      });
+    });
+  }
+
+  Posts seciliHaber;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xff2e3f6f), Color(0xffabb3da)],
-            begin: FractionalOffset(0.3, 1),
-          ),
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: postsList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(postsList[index].description),
+                  subtitle: Text(postsList[index].category),
+                  onTap: () {
+                    this.seciliHaber = postsList[index];
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HaberDetay(
+                                postsList[index].image,
+                                postsList[index].description,
+                                postsList[index].date,
+                                postsList[index].time)));
+                  },
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
   }

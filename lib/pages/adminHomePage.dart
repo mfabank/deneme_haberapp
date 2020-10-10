@@ -12,12 +12,9 @@ import 'package:flutter/material.dart';
 import 'denemePage.dart';
 
 class AdminHomePage extends StatefulWidget {
-
-
   final String value;
 
-
-  AdminHomePage({Key key,this.value}) : super (key:key);
+  AdminHomePage({Key key, this.value}) : super(key: key);
 
   @override
   _AdminHomePageState createState() => _AdminHomePageState();
@@ -61,7 +58,6 @@ class _AdminHomePageState extends State<AdminHomePage>
       body: Container(
         height: double.infinity,
         width: double.infinity,
-
         child: Container(
           child: Column(
             children: [
@@ -72,7 +68,7 @@ class _AdminHomePageState extends State<AdminHomePage>
                     Anasayfa(),
                     MKPHaberler(),
                     SonDkPage(),
-                    Teknoloji(),
+                    SporPage(),
                     Deneme(),
                   ],
                 ),

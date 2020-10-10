@@ -13,6 +13,7 @@ class Anasayfa extends StatefulWidget {
 
 class _AnasayfaState extends State<Anasayfa> {
   List<Posts> postsList = [];
+
   /*List deneme = [
     "İntihar Etti",
     "Balkondan atladı",
@@ -55,6 +56,7 @@ class _AnasayfaState extends State<Anasayfa> {
           DATA[individualKey]["description"],
           DATA[individualKey]["date"],
           DATA[individualKey]["time"],
+          DATA[individualKey]["category"],
           );
         postsList.add(posts);
       }

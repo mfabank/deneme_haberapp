@@ -2,11 +2,13 @@ import 'package:deneme_haberapp/pages/drawerPage.dart';
 import 'package:deneme_haberapp/tabs/anasayfaPage.dart';
 import 'package:deneme_haberapp/tabs/mkpHaberlerPage.dart';
 import 'package:deneme_haberapp/tabs/sokDkPage.dart';
+import 'package:deneme_haberapp/tabs/sporPage.dart';
 import 'package:deneme_haberapp/tabs/teknolojiPage.dart';
 import 'package:extended_tabs/extended_tabs.dart';
 import 'package:flutter/material.dart';
 
 import 'denemePage.dart';
+import 'ekle.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -33,6 +35,11 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>UploadPhotoPage()));
+        },
+      ),
       drawer: DrawerPage(valuee: widget.value.toString()),
       appBar: AppBar(
         centerTitle: true,
@@ -50,7 +57,7 @@ class _HomePageState extends State<HomePage>
             Tab(text: "Son Dk"),
             Tab(text: "Teknoloji"),
             Tab(
-              text: "Deneme",
+              text: "Spor",
             )
           ],
         ),
@@ -70,7 +77,7 @@ class _HomePageState extends State<HomePage>
                     MKPHaberler(),
                     SonDkPage(),
                     Teknoloji(),
-                    Deneme(),
+                    SporPage(),
                   ],
                 ),
               ),

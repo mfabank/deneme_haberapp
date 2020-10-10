@@ -1,4 +1,6 @@
+import 'package:deneme_haberapp/pages/homePage.dart';
 import 'package:deneme_haberapp/tabs/anasayfaPage.dart';
+import 'package:deneme_haberapp/tabs/sporPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -73,13 +75,14 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
       "description": _myValue,
       "date": _myValue2,
       "time": _myValue3,
+      "category" : dropdownValue,
     };
     ref.child("Posts").push().set(data);
   }
 
   void goToHomePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return Anasayfa();
+      return HomePage();
     }));
   }
 
@@ -159,7 +162,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                   dropdownValue = newValue;
                 });
               },
-              items: <String>['Spor', 'Ekonomi', 'Cinayet', 'Siyaset']
+              items: <String>['Spor', 'Son Dakika', 'MKP', 'Teknoloji']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
