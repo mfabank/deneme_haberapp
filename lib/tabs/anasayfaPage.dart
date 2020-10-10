@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:deneme_haberapp/models/posts.dart';
 import 'package:deneme_haberapp/pages/drawerPage.dart';
 import 'package:deneme_haberapp/tabs/sporPage.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class Anasayfa extends StatefulWidget {
@@ -9,6 +11,7 @@ class Anasayfa extends StatefulWidget {
 }
 
 class _AnasayfaState extends State<Anasayfa> {
+  List<Posts> postsList = [];
   List deneme = [
     "İntihar Etti",
     "Balkondan atladı",
@@ -37,14 +40,38 @@ class _AnasayfaState extends State<Anasayfa> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    DatabaseReference postsRef =
+        FirebaseDatabase.instance.reference().child("Posts");
+    postsRef.once().then((DataSnapshot snap) {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+      postsList.clear();
+      for (var individualKey in KEYS) {
+        Posts posts = Posts(
+          DATA[individualKey]["image"],
+          DATA[individualKey]["description"],
+          DATA[individualKey]["date"],
+          DATA[individualKey]["time"],
+        );
+        postsList.add(posts);
+      }
+      setState(() {
+        print("Length : $postsList.length");
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       resizeToAvoidBottomPadding: false,
       drawer: DrawerPage(),
       body: Container(
         height: double.infinity,
         width: double.infinity,
-
         child: Column(
           children: [
             Container(
@@ -84,7 +111,6 @@ class _AnasayfaState extends State<Anasayfa> {
                   height: 5.0,
                   margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 3.0),
                   decoration: BoxDecoration(
-
                     shape: BoxShape.circle,
                     color: _current == index ? Colors.red : Colors.blueGrey,
                   ),
@@ -93,14 +119,13 @@ class _AnasayfaState extends State<Anasayfa> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: deneme.length,
+                itemCount: postsList.length,
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color:
-                          Colors.red.withOpacity(0.1),
+                          color: Colors.red.withOpacity(0.1),
                           spreadRadius: 5,
                           blurRadius: 7,
                           offset: Offset(0, 3),
@@ -108,13 +133,12 @@ class _AnasayfaState extends State<Anasayfa> {
                       ],
                     ),
                     child: Card(
-
                       elevation: 20,
                       child: ListTile(
-                        title: Text(deneme[index]),
-                        subtitle: Text(deneme2[index]),
+                        title: Text(postsList[index].description),
+                        subtitle: Text(postsList[index].description),
                         leading: Image.network(
-                            "https://cdn.pixabay.com/photo/2015/11/07/12/02/business-man-1031755_960_720.jpg"),
+                            postsList[index].image),
                         dense: true,
                         onTap: () {},
                       ),
@@ -126,47 +150,78 @@ class _AnasayfaState extends State<Anasayfa> {
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 15,
+                itemCount: postsList.length,
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                            Colors.red.withOpacity(0.1),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.red.withOpacity(0.1),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
                     width: 200,
                     child: Card(
-
                       shape: RoundedRectangleBorder(
-
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-
-
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            leading: Image.network(
-                                "https://cdn.pixabay.com/photo/2015/11/07/12/02/business-man-1031755_960_720.jpg"),
-                            title: Text('MKP Haber Portal', style: TextStyle(color: Colors.white)),
-                            dense: true,
-                          ),
-                          Text("İntihar etti"),
-                          Text("Bu hayat böyle yaşanmaz dedi"),
-                        ],
-                      ),
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                              child: Expanded(
+                                child: ListView.builder(
+                                  itemCount: postsList.length,
+                                  itemBuilder: (_, index) {
+                                    return PostsUI(
+                                      postsList[index].image,
+
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ]),
                     ),
                   );
                 },
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget PostsUI(String image) {
+
+
+    return Card(
+      elevation: 10.0,
+      margin: EdgeInsets.all(15.0),
+      child: Container(
+        padding: EdgeInsets.all(14.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+
+
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Image.network(image, fit: BoxFit.cover),
+            SizedBox(
+              height: 10.0,
+            ),
+
           ],
         ),
       ),

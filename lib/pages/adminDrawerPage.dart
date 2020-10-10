@@ -73,7 +73,7 @@ class _AdminDrawerPageState extends State<AdminDrawerPage> {
             ),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => YaziEkle()));
+                  MaterialPageRoute(builder: (context) => UploadPhotoPage()));
             },
           ),
           ListTile(
