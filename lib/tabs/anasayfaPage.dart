@@ -12,6 +12,7 @@ class Anasayfa extends StatefulWidget {
 }
 
 class _AnasayfaState extends State<Anasayfa> {
+
   List<Posts> postsList = [];
 
   /*List deneme = [

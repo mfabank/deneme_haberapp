@@ -3,25 +3,25 @@ import 'package:deneme_haberapp/pages/haberDetay.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-class MKPHaberler extends StatefulWidget {
+class PolitikaPage extends StatefulWidget {
   @override
-  _MKPHaberlerState createState() => _MKPHaberlerState();
+  _PolitikaPageState createState() => _PolitikaPageState();
 }
 
-class _MKPHaberlerState extends State<MKPHaberler> {
+class _PolitikaPageState extends State<PolitikaPage> {
   List<Posts> postsList = [];
 
   @override
   void initState() {
     super.initState();
     DatabaseReference postsRef =
-        FirebaseDatabase.instance.reference().child("Posts");
+    FirebaseDatabase.instance.reference().child("Posts");
     postsRef.once().then((DataSnapshot snap) {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
       postsList.clear();
       for (var individualKey in KEYS) {
-        if (DATA[individualKey]["category"] == "MKP") {
+        if (DATA[individualKey]["category"] == "Politika") {
           Posts posts = Posts(
             DATA[individualKey]["image"],
             DATA[individualKey]["description"],

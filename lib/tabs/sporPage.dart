@@ -52,6 +52,8 @@ class _SporPageState extends State<SporPage> {
                 return ListTile(
                   title: Text(postsList[index].description),
                   subtitle: Text(postsList[index].category),
+                  leading: Image.network(
+                      postsList[index].image),
                   onTap: () {
                     this.seciliHaber = postsList[index];
                     Navigator.push(

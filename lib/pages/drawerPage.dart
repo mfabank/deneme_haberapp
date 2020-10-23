@@ -1,11 +1,14 @@
+import 'package:deneme_haberapp/models/auth.dart';
 import 'package:deneme_haberapp/pages/homePage.dart';
 import 'package:flutter/material.dart';
 
 class DrawerPage extends StatefulWidget {
-  final String valuee;
+  final String valuee, isim, soyad, yas;
 
-  DrawerPage({Key key,this.valuee}) : super (key:key);
+  DrawerPage({Key key, this.valuee, this.isim, this.soyad, this.yas})
+      : super(key: key);
   // ignore: deprecated_member_use
+
 
 
   @override
@@ -13,6 +16,7 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -40,7 +44,18 @@ class _DrawerPageState extends State<DrawerPage> {
                   "${widget.valuee}",
                   style: TextStyle(fontSize: 14, color: Colors.white),
                 ),
-
+                Text(
+                  "${widget.isim}",
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                Text(
+                  "${widget.soyad}",
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                Text(
+                  "${widget.yas}",
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
               ],
             ),
           ),
@@ -62,17 +77,13 @@ class _DrawerPageState extends State<DrawerPage> {
             subtitle: Text("Bildirim ayarları"),
             onTap: null,
           ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text(
-              "Çıkış",
-              style: TextStyle(fontSize: 18),
-            ),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
+          FlatButton.icon(
+            icon: Icon(Icons.person),
+            label: Text("Çıkış"),
+            onPressed: () async {
+              await _auth.singOut();
             },
-          ),
+          )
         ],
       ),
     );

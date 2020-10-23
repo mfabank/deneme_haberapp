@@ -24,6 +24,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
   String url;
   final formKey = GlobalKey<FormState>();
   String dropdownValue = 'Spor';
+  var email, isim, soyisim, yas;
 
   Future getImage() async {
     var tempImage = await ImagePicker.pickImage(
@@ -33,7 +34,6 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
       sampleImage = tempImage;
     });
   }
-
 
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -48,10 +48,10 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
   void uploadStatusImage() async {
     if (validateAndSave()) {
       final StorageReference postImageRef =
-      FirebaseStorage.instance.ref().child("Posts");
+          FirebaseStorage.instance.ref().child("Posts");
       var timeKey = DateTime.now();
       final StorageUploadTask uploadTask =
-      postImageRef.child(timeKey.toString() + ".jpg").putFile(sampleImage);
+          postImageRef.child(timeKey.toString() + ".jpg").putFile(sampleImage);
       var ImageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
       url = ImageUrl.toString();
       print("Image Url = " + url);
@@ -75,7 +75,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
       "description": _myValue,
       "date": _myValue2,
       "time": _myValue3,
-      "category" : dropdownValue,
+      "category": dropdownValue,
     };
     ref.child("Posts").push().set(data);
   }
@@ -100,11 +100,17 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
           child: Column(
             children: [
               Container(
-
                 width: 200,
                 height: 200,
-                child: sampleImage == null ? Center(child: Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQaAMhb-ax7UpxCRlDB9a2IGCsDHS45zdKcPA&usqp=CAU",width: 200,height: 200,fit: BoxFit.fill,)) : enableUpload(),
-
+                child: sampleImage == null
+                    ? Center(
+                        child: Image.network(
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQaAMhb-ax7UpxCRlDB9a2IGCsDHS45zdKcPA&usqp=CAU",
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.fill,
+                      ))
+                    : enableUpload(),
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: "Haber Başlığı"),
@@ -117,7 +123,6 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-
                   hintText: "Haber özetini giriniz",
                   labelText: "Özet",
                   isDense: true,
@@ -142,35 +147,34 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                   },
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
-
                 ),
               ),
-          Container(
-            padding: EdgeInsets.only(left: 240,bottom:80),
-            child: DropdownButton<String>(
-              value: dropdownValue,
-              icon: Icon(Icons.category),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
+              Container(
+                padding: EdgeInsets.only(left: 240, bottom: 80),
+                child: DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: ilgiliIcon(dropdownValue),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      dropdownValue = newValue;
+                    });
+                  },
+                  items: <String>['Spor', 'Son Dakika', 'MKP', 'Teknoloji',"Politika"]
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
               ),
-              onChanged: (String newValue) {
-                setState(() {
-                  dropdownValue = newValue;
-                });
-              },
-              items: <String>['Spor', 'Son Dakika', 'MKP', 'Teknoloji']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
               RaisedButton(
                 elevation: 10.0,
                 child: Text("Haberi Ekle"),
@@ -194,7 +198,6 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
     return SingleChildScrollView(
       child: Container(
         child: Form(
-
           child: Column(
             children: [
               Image.file(
@@ -203,11 +206,25 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                 width: 200.0,
                 fit: BoxFit.fill,
               ),
-
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget ilgiliIcon(value) {
+    if (value == "Spor") {
+      return Icon(Icons.person);
+    } else if (value == "Teknoloji") {
+      return Icon(Icons.precision_manufacturing_rounded);
+    } else if (value == "MKP") {
+      return Icon(Icons.image);
+    } else if (value == "Son Dakika") {
+      return Icon(Icons.new_releases_sharp);
+    } else if (value == "Politika") {
+      return Icon(Icons.compare);
+    }
+
   }
 }
